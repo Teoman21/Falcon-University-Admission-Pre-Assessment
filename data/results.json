@@ -106,5 +106,67 @@
         "content": "Thank you for sharing that! It looks like you have completed Calculus and Physics, which is great for your application.\n\nNow that I have all the information, let me evaluate your eligibility for the Computer Science program. \n\n- GPA: 4.0 (meets the minimum requirement of 3.2)\n- SAT Score: 1580 (meets the minimum requirement of 1200)\n- Relevant coursework: Calculus and Physics (meets the required courses)\n\nBased on this information, I’m happy to inform you that you **meet the criteria** for the Computer Science program at Falcon University!\n\nThank you for your interest in Falcon University, and our admin team will be in touch with you soon. \n\n<ELIGIBILITY_RESULT>\n{\"studentName\":\"[Your Name]\",\"program\":\"Computer Science\",\"outcome\":\"Meets Criteria\",\"ruleSummary\":\"You have a GPA of 4.0, SAT score of 1580, and completed the required coursework.\"}\n</ELIGIBILITY_RESULT>"
       }
     ]
+  },
+  {
+    "id": "d77b80cb-3b2d-482a-a41e-0bc1bb912595",
+    "createdAt": "2026-04-22T17:36:09.978Z",
+    "studentName": "Teoman Kaman",
+    "program": "Computer Science",
+    "outcome": "Criteria Not Met",
+    "ruleSummary": "Teoman has a GPA of 2.5 and an SAT score of 890, which are below the required thresholds of 3.2 GPA and 1200 SAT for the Computer Science program.",
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "Hello! Welcome to Falcon University. I'm your AI Admissions Officer, here to assist you with the eligibility pre-assessment for our programs. May I start by asking for your full name?"
+      },
+      {
+        "role": "user",
+        "content": "I am Ai major"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for sharing that! However, could you please provide your full name so I can assist you better?"
+      },
+      {
+        "role": "user",
+        "content": "Teoman Kaman"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you, Teoman Kaman! Which program are you interested in: Business Administration or Computer Science?"
+      },
+      {
+        "role": "user",
+        "content": "Computer science"
+      },
+      {
+        "role": "assistant",
+        "content": "Great choice, Teoman! Now, could you please provide your GPA on a 4.0 scale?"
+      },
+      {
+        "role": "user",
+        "content": "2.5"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for that information. Now, could you share your SAT or ACT score with me?"
+      },
+      {
+        "role": "user",
+        "content": "890"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you, Teoman. Let's move on to your relevant coursework. Could you tell me about the mathematics and science courses you've taken, especially in relation to calculus, physics, or chemistry?"
+      },
+      {
+        "role": "user",
+        "content": "no relevant coursework"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for sharing that information, Teoman. Based on what you've provided, let's evaluate your eligibility for the Computer Science program.\n\nYour GPA of 2.5 is below the required minimum of 3.2, and your SAT score of 890 does not meet the minimum score of 1200. Additionally, there is no relevant coursework in mathematics or science.\n\nTherefore, I must inform you that your application does not meet the criteria for the Computer Science program at this time.\n\nThank you for considering Falcon University. If you have any questions or would like to explore other options, please feel free to reach out.\n\n<ELIGIBILITY_RESULT>\n{\"studentName\":\"Teoman Kaman\",\"program\":\"Computer Science\",\"outcome\":\"Criteria Not Met\",\"ruleSummary\":\"Teoman has a GPA of 2.5 and an SAT score of 890, which are below the required thresholds of 3.2 GPA and 1200 SAT for the Computer Science program.\"}\n</ELIGIBILITY_RESULT>"
+      }
+    ]
   }
 ]
