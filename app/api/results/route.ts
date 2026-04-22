@@ -4,7 +4,7 @@ import { getAllApplicants } from '@/lib/db'
 
 export async function GET() {
   try {
-    const applicants = getAllApplicants()
+    const applicants = await getAllApplicants()
     return NextResponse.json(applicants)
   } catch (err) {
     console.error('Results error:', err)

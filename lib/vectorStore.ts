@@ -1,6 +1,7 @@
 // lib/vectorStore.ts
-// In-memory vector store — uses OpenAI embeddings directly to avoid Next.js/LangChain import issues
+// In-memory vector store with Neon DB persistence for cold-start recovery
 import OpenAI from 'openai'
+import { saveKnowledgeBase, getKnowledgeBase } from './db'
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -26,8 +27,7 @@ function splitIntoChunks(text: string, chunkSize = 800, overlap = 150): string[]
   const result: string[] = []
   let start = 0
   while (start < text.length) {
-    const end = Math.min(start + chunkSize, text.length)
-    result.push(text.slice(start, end))
+    result.push(text.slice(start, Math.min(start + chunkSize, text.length)))
     start += chunkSize - overlap
   }
   return result
@@ -36,9 +36,17 @@ function splitIntoChunks(text: string, chunkSize = 800, overlap = 150): string[]
 async function embed(text: string): Promise<number[]> {
   const resp = await client.embeddings.create({
     model: 'text-embedding-3-small',
-    input: text.slice(0, 8000), // max tokens guard
+    input: text.slice(0, 8000),
   })
   return resp.data[0].embedding
+}
+
+async function buildChunks(text: string): Promise<void> {
+  const parts = splitIntoChunks(text)
+  chunks = []
+  for (const part of parts) {
+    chunks.push({ text: part, embedding: await embed(part) })
+  }
 }
 
 export function getKnowledgeBaseText(): string {
@@ -47,26 +55,30 @@ export function getKnowledgeBaseText(): string {
 
 export async function buildVectorStore(text: string): Promise<void> {
   knowledgeBaseText = text
-  const parts = splitIntoChunks(text)
-  chunks = []
-  for (const part of parts) {
-    const embedding = await embed(part)
-    chunks.push({ text: part, embedding })
+  await buildChunks(text)
+  // Persist to DB so cold starts can recover
+  await saveKnowledgeBase(text)
+}
+
+/**
+ * Ensures vector store is ready — rebuilds from DB on cold start if needed.
+ */
+export async function ensureVectorStore(): Promise<void> {
+  if (chunks.length > 0) return // already loaded
+  const dbText = await getKnowledgeBase()
+  if (dbText) {
+    knowledgeBaseText = dbText
+    await buildChunks(dbText)
   }
 }
 
 export async function retrieveContext(query: string, k = 4): Promise<string> {
   if (chunks.length === 0) return ''
   const queryEmbedding = await embed(query)
-  const scored = chunks.map(c => ({
-    text: c.text,
-    score: cosineSimilarity(queryEmbedding, c.embedding),
-  }))
-  scored.sort((a, b) => b.score - a.score)
-  return scored
-    .slice(0, k)
-    .map(c => c.text)
-    .join('\n\n---\n\n')
+  const scored = chunks
+    .map(c => ({ text: c.text, score: cosineSimilarity(queryEmbedding, c.embedding) }))
+    .sort((a, b) => b.score - a.score)
+  return scored.slice(0, k).map(c => c.text).join('\n\n---\n\n')
 }
 
 export function isVectorStoreReady(): boolean {

@@ -39,9 +39,10 @@ npm install --legacy-peer-deps
 ```bash
 cp .env.example .env.local
 ```
-Edit `.env.local` and add your OpenAI API key:
+Edit `.env.local` with your keys:
 ```
 OPENAI_API_KEY=sk-...your-key-here...
+DATABASE_URL=postgresql://...your-neon-url...
 ```
 
 ### 4. Run the development server
@@ -168,36 +169,74 @@ A static prompt hardcodes rules that become stale when requirements change each 
 │   ├── globals.css             # Design system + animations
 │   └── layout.tsx
 ├── lib/
-│   ├── vectorStore.ts          # LangChain RAG setup
-│   ├── db.ts                   # JSON database helpers
+│   ├── vectorStore.ts          # OpenAI embeddings + RAG
+│   ├── db.ts                   # Neon PostgreSQL helpers
 │   └── session.ts              # Cookie-based auth
-├── data/
-│   └── results.json            # Persisted applicant records
-└── .env.local                  # OPENAI_API_KEY
+└── .env.local                  # OPENAI_API_KEY + DATABASE_URL
 ```
 
 ---
 
-## 🌐 Deployment
+## 🌐 Deployment (Free Tier)
 
-### Local (Development)
+### Stack
+| Service | Purpose | Cost |
+|---------|---------|------|
+| **Vercel** | Hosting + serverless | Free |
+| **Neon** | PostgreSQL database | Free (0.5GB) |
+| **GitHub Actions** | CI (build check) | Free |
+
+---
+
+### Step 1 — Set up Neon Database (free)
+1. Go to [neon.tech](https://neon.tech) → create free account
+2. Create a new project → copy the **Connection String**
+3. It looks like: `postgresql://user:pass@host/db?sslmode=require`
+
+> Tables are created automatically on first request — no manual SQL needed.
+
+---
+
+### Step 2 — Deploy to Vercel (free)
+1. Push code to GitHub
+2. Go to [vercel.com](https://vercel.com) → **Add New Project** → import your GitHub repo
+3. In Vercel project settings → **Environment Variables**, add:
+   ```
+   OPENAI_API_KEY   = sk-...your-key...
+   DATABASE_URL     = postgresql://...your-neon-url...
+   ```
+4. Click **Deploy** ✅
+
+**Every `git push` to `main` auto-deploys** — no manual steps.
+
+---
+
+### Step 3 — CI/CD (GitHub Actions)
+Already configured at `.github/workflows/ci.yml`.
+
+Add these secrets to your GitHub repo (**Settings → Secrets → Actions**):
+```
+OPENAI_API_KEY
+DATABASE_URL
+```
+
+Flow:
+```
+git push origin main
+       ↓
+GitHub Actions: type check + build ✅
+       ↓
+Vercel: auto-deploy to production 🚀
+```
+
+---
+
+### Local Development
 ```bash
+npm install --legacy-peer-deps
 npm run dev
+# → http://localhost:3000
 ```
-
-### Production Build
-```bash
-npm run build
-npm start
-```
-
-### Vercel (Recommended)
-1. Push to GitHub
-2. Connect repo to [vercel.com](https://vercel.com)
-3. Add `OPENAI_API_KEY` environment variable
-4. Deploy!
-
-> ⚠️ **Note**: The in-memory vector store resets on each serverless function cold start. For Vercel deployment, the PDF must be re-uploaded after each restart, or upgrade to a persistent vector DB.
 
 ---
 

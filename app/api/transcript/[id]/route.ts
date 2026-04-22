@@ -6,7 +6,7 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const applicant = getApplicantById(params.id)
+  const applicant = await getApplicantById(params.id)
   if (!applicant) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }

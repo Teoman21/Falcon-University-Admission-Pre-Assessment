@@ -1,7 +1,7 @@
 // app/api/chat/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { retrieveContext, isVectorStoreReady, getKnowledgeBaseText } from '@/lib/vectorStore'
+import { retrieveContext, isVectorStoreReady, getKnowledgeBaseText, ensureVectorStore } from '@/lib/vectorStore'
 import { saveApplicant } from '@/lib/db'
 import type { Message } from '@/lib/db'
 
@@ -86,6 +86,9 @@ export async function POST(req: NextRequest) {
       .map(m => m.content)
       .join(' ')
 
+    // Rebuild vector store from DB on cold start if needed
+    await ensureVectorStore()
+
     let context = ''
     if (isVectorStoreReady()) {
       context = await retrieveContext(recentText)
@@ -123,7 +126,7 @@ export async function POST(req: NextRequest) {
           ...messages,
           { role: 'assistant', content: assistantMessage },
         ]
-        const saved = saveApplicant({
+        const saved = await saveApplicant({
           studentName: resultData.studentName || 'Anonymous',
           program: resultData.program || 'Unknown',
           outcome: resultData.outcome || 'Pending',
