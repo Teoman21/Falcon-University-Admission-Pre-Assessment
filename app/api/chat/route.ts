@@ -57,7 +57,7 @@ YOUR INTERVIEW PROCESS:
 7. Once you have enough information, evaluate eligibility based STRICTLY on the requirements in the knowledge base above.
 8. Announce the result clearly: either "Meets Criteria" or "Criteria Not Met".
 9. Provide a brief explanation of the decision.
-10. When you have made your final eligibility decision, append the following JSON block at the very END of your message. Replace every field with the ACTUAL values from the conversation — do NOT use placeholder text like [name] or [program]:
+10. YOU MUST append the following JSON block at the very END of your message when you announce the result. This is MANDATORY — the system cannot record the result without it. Use the ACTUAL values from the conversation:
 
 <ELIGIBILITY_RESULT>
 {"studentName":"ACTUAL_STUDENT_NAME","program":"ACTUAL_PROGRAM","outcome":"Meets Criteria OR Criteria Not Met","ruleSummary":"ACTUAL 1-2 sentence reason based on their GPA, test scores, and coursework"}
@@ -72,8 +72,36 @@ IMPORTANT RULES:
 - Be warm, professional, and encouraging.
 - Only ask ONE question at a time.
 - Do NOT include the ELIGIBILITY_RESULT block until you have collected: name, program, GPA, test score, and coursework.
+- ALWAYS include the ELIGIBILITY_RESULT block in the same message where you announce "Meets Criteria" or "Criteria Not Met". Never announce the result without it.
 - In the ELIGIBILITY_RESULT JSON, always use the student's real name from the conversation — never write the word "name" or use brackets.
 - After giving the result, thank the student and let them know the admin team will be in touch.`
+}
+
+function extractFromTranscript(messages: Message[]): { studentName: string; program: string } {
+  let studentName = 'Anonymous'
+  let program = 'Unknown'
+
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i]
+    // AI asks for name → next user message is the name
+    if (msg.role === 'assistant' && /your (full )?name/i.test(msg.content)) {
+      const next = messages[i + 1]
+      if (next?.role === 'user' && next.content.trim().length < 60) {
+        studentName = next.content.trim()
+      }
+    }
+    if (msg.role === 'user') {
+      if (/business administration/i.test(msg.content)) program = 'Business Administration'
+      else if (/computer science/i.test(msg.content)) program = 'Computer Science'
+    }
+    // Also check assistant messages that confirm the program
+    if (msg.role === 'assistant') {
+      if (/business administration/i.test(msg.content)) program = 'Business Administration'
+      else if (/computer science/i.test(msg.content)) program = 'Computer Science'
+    }
+  }
+
+  return { studentName, program }
 }
 
 export async function POST(req: NextRequest) {
@@ -104,28 +132,50 @@ export async function POST(req: NextRequest) {
 
     const assistantMessage = completion.choices[0].message.content || ''
 
-    // Parse eligibility result if present
     const resultMatch = assistantMessage.match(/<ELIGIBILITY_RESULT>([\s\S]*?)<\/ELIGIBILITY_RESULT>/)
+    const hasDecisionPhrase = /meets criteria|criteria not met/i.test(assistantMessage)
+    const isDecision = !!(resultMatch || hasDecisionPhrase)
     let savedId: string | null = null
 
-    if (resultMatch) {
+    if (isDecision) {
+      const fullTranscript: Message[] = [
+        ...messages,
+        { role: 'assistant', content: assistantMessage },
+      ]
+
+      let studentName = 'Anonymous'
+      let program = 'Unknown'
+      let outcome: 'Meets Criteria' | 'Criteria Not Met' | 'Pending' = 'Pending'
+      let ruleSummary = ''
+
+      if (resultMatch) {
+        try {
+          const resultData = JSON.parse(resultMatch[1].trim())
+          studentName = resultData.studentName || 'Anonymous'
+          program = resultData.program || 'Unknown'
+          outcome = resultData.outcome || 'Pending'
+          ruleSummary = resultData.ruleSummary || ''
+        } catch {
+          // JSON malformed — fall back to transcript extraction below
+          const extracted = extractFromTranscript(fullTranscript)
+          studentName = extracted.studentName
+          program = extracted.program
+          outcome = /meets criteria/i.test(assistantMessage) ? 'Meets Criteria' : 'Criteria Not Met'
+        }
+      } else {
+        // AI gave verbal decision without the JSON block
+        const extracted = extractFromTranscript(fullTranscript)
+        studentName = extracted.studentName
+        program = extracted.program
+        outcome = /meets criteria/i.test(assistantMessage) ? 'Meets Criteria' : 'Criteria Not Met'
+      }
+
       try {
-        const resultData = JSON.parse(resultMatch[1].trim())
-        const fullTranscript: Message[] = [
-          ...messages,
-          { role: 'assistant', content: assistantMessage },
-        ]
-        const saved = await saveApplicant({
-          studentName: resultData.studentName || 'Anonymous',
-          program: resultData.program || 'Unknown',
-          outcome: resultData.outcome || 'Pending',
-          ruleSummary: resultData.ruleSummary || '',
-          transcript: fullTranscript,
-        })
+        const saved = await saveApplicant({ studentName, program, outcome, ruleSummary, transcript: fullTranscript })
         savedId = saved.id
       } catch (e) {
         console.error('Failed to save eligibility result:', e)
-        return NextResponse.json({ error: 'Failed to save result to database' }, { status: 500 })
+        // Don't block the response — the student still sees their result
       }
     }
 
@@ -136,7 +186,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       message: cleanMessage,
-      isComplete: !!resultMatch,
+      isComplete: isDecision,
       applicantId: savedId,
     })
   } catch (err) {
