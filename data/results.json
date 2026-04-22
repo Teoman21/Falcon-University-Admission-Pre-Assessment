@@ -1,0 +1,110 @@
+[
+  {
+    "id": "343489f3-4588-484c-aead-3dbc7b4351be",
+    "createdAt": "2026-04-21T22:01:35.398Z",
+    "studentName": "John Doe",
+    "program": "Computer Science",
+    "outcome": "Meets Criteria",
+    "ruleSummary": "John meets all the requirements for the Computer Science program with a GPA of 3.85, an SAT score of 1540, and relevant coursework.",
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "Hello and welcome! I'm so glad you're interested in Falcon University. My name is the AI Admissions Officer, and I'm here to help you with your eligibility pre-assessment. \n\nTo get started, could you please tell me your full name?"
+      },
+      {
+        "role": "user",
+        "content": "Hi, I'm John Doe. I'm interested in the AI Computer Science program."
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you, John! It's great to meet you. Now, could you please share your GPA on a 4.0 scale?"
+      },
+      {
+        "role": "user",
+        "content": "My GPA is 3.85."
+      },
+      {
+        "role": "assistant",
+        "content": "That's impressive, John! Next, could you let me know your SAT or ACT score?"
+      },
+      {
+        "role": "user",
+        "content": "My SAT score is 1540."
+      },
+      {
+        "role": "assistant",
+        "content": "Great score, John! Now, can you tell me about your relevant coursework, specifically in mathematics and science? For example, did you take calculus, physics, or chemistry?"
+      },
+      {
+        "role": "user",
+        "content": "I've taken AP Calculus BC, AP Physics C, and AP Computer Science A."
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for that information, John! It looks like you have a strong academic background. \n\nNow, just to confirm, do you have any programming experience? It's preferred but not required for the Computer Science program."
+      },
+      {
+        "role": "user",
+        "content": "Yes, I have experience with Python and Java from my AP classes and personal projects."
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for sharing, John! You have a solid background for the Computer Science program. \n\nBased on the information you've provided:\n- Your GPA is 3.85, which exceeds the minimum requirement of 3.2.\n- Your SAT score is 1540, which is above the required 1200.\n- You've taken the required coursework in mathematics and science, including AP Calculus and AP Physics.\n- You also have relevant programming experience.\n\nI'm happy to inform you that you **meet the criteria** for admission to the Computer Science program at Falcon University!\n\nThank you for your interest, and our admissions team will be in touch with you soon regarding the next steps. \n\n<ELIGIBILITY_RESULT>\n{\"studentName\":\"John Doe\",\"program\":\"Computer Science\",\"outcome\":\"Meets Criteria\",\"ruleSummary\":\"John meets all the requirements for the Computer Science program with a GPA of 3.85, an SAT score of 1540, and relevant coursework.\"}\n</ELIGIBILITY_RESULT>"
+      }
+    ]
+  },
+  {
+    "id": "930fc08f-93a5-452f-9281-f9d43e99a163",
+    "createdAt": "2026-04-21T22:03:28.781Z",
+    "studentName": "[Your Name]",
+    "program": "Computer Science",
+    "outcome": "Meets Criteria",
+    "ruleSummary": "You have a GPA of 4.0, SAT score of 1580, and completed the required coursework.",
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "Hello! Welcome to Falcon University. My name is the AI Admissions Officer, and I'm here to help you with the pre-assessment for your eligibility. \n\nCould you please start by telling me your full name?"
+      },
+      {
+        "role": "user",
+        "content": "ask me partial derivative"
+      },
+      {
+        "role": "assistant",
+        "content": "I understand that you might be looking for information on a different topic, but my focus here is on the admissions pre-assessment for Falcon University. \n\nLet's continue with the eligibility process! Could you please tell me which program you are interested in: Business Administration or Computer Science?"
+      },
+      {
+        "role": "user",
+        "content": "Compuer science"
+      },
+      {
+        "role": "assistant",
+        "content": "Great choice! Computer Science is an exciting field. \n\nCould you please tell me your GPA on a 4.0 scale?"
+      },
+      {
+        "role": "user",
+        "content": "4"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you! A GPA of 4.0 is excellent.\n\nNow, could you share your SAT or ACT score with me?"
+      },
+      {
+        "role": "user",
+        "content": "1580"
+      },
+      {
+        "role": "assistant",
+        "content": "That's an impressive score! \n\nNext, could you let me know about your relevant coursework? Specifically, which mathematics and science courses have you completed?"
+      },
+      {
+        "role": "user",
+        "content": "calculus physics"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for sharing that! It looks like you have completed Calculus and Physics, which is great for your application.\n\nNow that I have all the information, let me evaluate your eligibility for the Computer Science program. \n\n- GPA: 4.0 (meets the minimum requirement of 3.2)\n- SAT Score: 1580 (meets the minimum requirement of 1200)\n- Relevant coursework: Calculus and Physics (meets the required courses)\n\nBased on this information, I’m happy to inform you that you **meet the criteria** for the Computer Science program at Falcon University!\n\nThank you for your interest in Falcon University, and our admin team will be in touch with you soon. \n\n<ELIGIBILITY_RESULT>\n{\"studentName\":\"[Your Name]\",\"program\":\"Computer Science\",\"outcome\":\"Meets Criteria\",\"ruleSummary\":\"You have a GPA of 4.0, SAT score of 1580, and completed the required coursework.\"}\n</ELIGIBILITY_RESULT>"
+      }
+    ]
+  }
+]
