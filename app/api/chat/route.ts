@@ -135,7 +135,8 @@ export async function POST(req: NextRequest) {
         })
         savedId = saved.id
       } catch (e) {
-        console.error('Failed to parse eligibility result:', e)
+        console.error('Failed to save eligibility result:', e)
+        return NextResponse.json({ error: 'Failed to save result to database' }, { status: 500 })
       }
     }
 
