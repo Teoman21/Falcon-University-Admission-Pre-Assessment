@@ -168,5 +168,59 @@
         "content": "Thank you for sharing that information, Teoman. Based on what you've provided, let's evaluate your eligibility for the Computer Science program.\n\nYour GPA of 2.5 is below the required minimum of 3.2, and your SAT score of 890 does not meet the minimum score of 1200. Additionally, there is no relevant coursework in mathematics or science.\n\nTherefore, I must inform you that your application does not meet the criteria for the Computer Science program at this time.\n\nThank you for considering Falcon University. If you have any questions or would like to explore other options, please feel free to reach out.\n\n<ELIGIBILITY_RESULT>\n{\"studentName\":\"Teoman Kaman\",\"program\":\"Computer Science\",\"outcome\":\"Criteria Not Met\",\"ruleSummary\":\"Teoman has a GPA of 2.5 and an SAT score of 890, which are below the required thresholds of 3.2 GPA and 1200 SAT for the Computer Science program.\"}\n</ELIGIBILITY_RESULT>"
       }
     ]
+  },
+  {
+    "id": "57434ca7-2576-405f-97b2-04f76c0df1b4",
+    "createdAt": "2026-04-22T17:39:30.815Z",
+    "studentName": "Jane Doe",
+    "program": "Business Administration",
+    "outcome": "Criteria Not Met",
+    "ruleSummary": "Jane has a GPA of 2.9 and an SAT score of 900, which do not meet the minimum requirements of 3.0 GPA and 1100 SAT for the Business Administration program.",
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "Hello! Welcome to Falcon University. I’m here to help you with your admission eligibility pre-assessment. \n\nTo start, could you please tell me your full name?"
+      },
+      {
+        "role": "user",
+        "content": "My name is Jane Doe, Businness administration"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you, Jane! It's great to meet you. Now, could you please share your GPA on a 4.0 scale?"
+      },
+      {
+        "role": "user",
+        "content": "2.9"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for that information, Jane. Next, could you provide your SAT or ACT score?"
+      },
+      {
+        "role": "user",
+        "content": "900"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks, Jane. Now, can you tell me about the relevant coursework you've completed, specifically in mathematics and English?"
+      },
+      {
+        "role": "user",
+        "content": "calculus"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for sharing that, Jane! Just to clarify, you mentioned taking calculus. Did you also complete a course in English Composition?"
+      },
+      {
+        "role": "user",
+        "content": "no"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for clarifying that, Jane. Based on the information you've provided:\n\n- Program: Business Administration\n- GPA: 2.9\n- SAT Score: 900\n- Relevant Coursework: Calculus, but no English Composition\n\nUnfortunately, it appears that you do not meet the criteria for admission into the Business Administration program at Falcon University. The minimum GPA requirement is 3.0, and your SAT score is below the required 1100. Additionally, English Composition is a required course.\n\nI encourage you to consider other options or possibly strengthening your application in the future. Thank you for your interest in Falcon University, and the admissions team will be in touch.\n\n<ELIGIBILITY_RESULT>\n{\"studentName\":\"Jane Doe\",\"program\":\"Business Administration\",\"outcome\":\"Criteria Not Met\",\"ruleSummary\":\"Jane has a GPA of 2.9 and an SAT score of 900, which do not meet the minimum requirements of 3.0 GPA and 1100 SAT for the Business Administration program.\"}\n</ELIGIBILITY_RESULT>"
+      }
+    ]
   }
 ]
