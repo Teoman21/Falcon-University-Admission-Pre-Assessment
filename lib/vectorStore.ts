@@ -55,20 +55,14 @@ export function getKnowledgeBaseText(): string {
 
 export async function buildVectorStore(text: string): Promise<void> {
   knowledgeBaseText = text
-  await buildChunks(text)
-  // Persist to DB so cold starts can recover
   await saveKnowledgeBase(text)
 }
 
-/**
- * Ensures vector store is ready — rebuilds from DB on cold start if needed.
- */
 export async function ensureVectorStore(): Promise<void> {
-  if (chunks.length > 0) return // already loaded
+  if (knowledgeBaseText) return
   const dbText = await getKnowledgeBase()
   if (dbText) {
     knowledgeBaseText = dbText
-    await buildChunks(dbText)
   }
 }
 

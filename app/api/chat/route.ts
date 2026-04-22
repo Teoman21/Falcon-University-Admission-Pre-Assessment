@@ -1,7 +1,7 @@
 // app/api/chat/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { retrieveContext, isVectorStoreReady, getKnowledgeBaseText, ensureVectorStore } from '@/lib/vectorStore'
+import { getKnowledgeBaseText, ensureVectorStore } from '@/lib/vectorStore'
 import { saveApplicant } from '@/lib/db'
 import type { Message } from '@/lib/db'
 
@@ -80,21 +80,10 @@ export async function POST(req: NextRequest) {
   try {
     const { messages }: { messages: Message[] } = await req.json()
 
-    // Build the last 4 messages as query for RAG
-    const recentText = messages
-      .slice(-4)
-      .map(m => m.content)
-      .join(' ')
-
-    // Rebuild vector store from DB on cold start if needed
+    // Load knowledge base text from DB on cold start if needed
     await ensureVectorStore()
 
-    let context = ''
-    if (isVectorStoreReady()) {
-      context = await retrieveContext(recentText)
-    } else {
-      context = getKnowledgeBaseText() || FALLBACK_KNOWLEDGE
-    }
+    const context = getKnowledgeBaseText() || FALLBACK_KNOWLEDGE
 
     const systemPrompt = buildSystemPrompt(context)
 
