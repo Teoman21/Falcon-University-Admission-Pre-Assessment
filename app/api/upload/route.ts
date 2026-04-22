@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    // Dynamic import to avoid build issues
-    const pdfParse = (await import('pdf-parse')).default
+    // Use lib entry directly to avoid pdf-parse debug mode reading test files from disk (fails on Vercel)
+    const pdfParse = (await import('pdf-parse/lib/pdf-parse.js')).default
     const parsed = await pdfParse(buffer)
     const text = parsed.text
 
