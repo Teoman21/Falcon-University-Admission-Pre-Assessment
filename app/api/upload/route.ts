@@ -2,9 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { buildVectorStore } from '@/lib/vectorStore'
 
-export const config = {
-  api: { bodyParser: false },
-}
+export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
